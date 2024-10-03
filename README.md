@@ -6,3 +6,5 @@ Group Members:
 Ali Tamer 
 
 Rohan
+
+Komal Neupane
