@@ -75,3 +75,117 @@ def current_user(username):
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
+# function for the selection of the user news preference list
+def user_pref_list(username):
+    # Select the preferred country preference
+    print("\nSelect a country from the following list:")
+    for code, name in country_names.items():
+        print(f"{code}: {name}")
+    # if country is invalid display error message
+    while True:
+        country = input("Enter a country code (e.g., 'us' for United States): ").lower()
+        if country not in country_names:
+            print("Invalid country code. Please try again.")
+        else:
+            break
+
+    # Select the category of news wanted from the list
+    print("\nSelect a news category from the following list:")
+    print(', '.join(categories))
+    while True:
+        category = input("Enter a category (e.g., 'business'): ").lower()
+        # if not in list display error
+        if category not in categories:
+            print("Invalid category. Please try again.")
+        else:
+            break
+
+    # Select a language from the list
+    print("\nSelect a language from the following list:")
+    for code, name in languages.items():
+        print(f"{code}: {name}")
+    while True:
+        language = input("Enter a language code (e.g., 'en' for English): ").lower()
+        # if not in list display error
+        if language not in languages:
+            print("Invalid language code. Please try again.")
+        else:
+            break
+
+    # Select the summary style wanted for the articles
+    summ_styles = ['brief', 'detailed', 'humorous', 'eli5']
+    print("\nDo you prefer brief, detailed, humorous, or ELI5 summaries?")
+    while True:
+        summ_style = input("Enter summary style (brief/detailed/humorous/ELI5): ").strip().lower()
+        # if not in list display error
+        if summ_style not in summ_styles:
+            print("Invalid input. Please choose from brief, detailed, humorous, or ELI5.")
+        else:
+            break
+
+    # the frequency of the articles is determined by the user by hours
+    print("\nHow often would you like to fetch new articles? (in hours, e.g., 1, 3, 24)")
+    while True:
+        try:
+            frequency = int(input("Enter frequency of updates: ").strip())
+
+            if frequency > 0 and frequency < 25:
+                break
+            else:
+                print("Please enter a positive number.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    # user preferences list updated and stored in database of
+    preferences = {
+        "country": country,
+        "category": category,
+        "language": language,
+        "summaryStyle": summ_style,
+        "frequency": frequency
+    }
+
+    # Updates the user preferences in the database
+    result = users_collection.update_one({"username": username}, {"$set": {"preferences": preferences}})
+
+    if result.modified_count:
+        print("Preferences updated successfully.")
+
+        # Delete old articles if preferences are updated
+        delete_articles(username)
+
+        # Fetch and store new articles based on updated preferences
+        articles = fetch_news(preferences)
+
+        if not articles:
+            print("No articles found currently for the preferences you've chosen. Please come back and check again later.")
+        else:
+            print("New articles fetched and saved:\n")
+            for article in articles:
+                article_summary = summarize_article(article, preferences['summaryStyle'])
+
+                # Create news entry in the database
+                news_entry = {
+                    "username": username,
+                    "fetched_at": datetime.now(),
+                    "preferences": preferences,
+                    "article": {
+                        "title": article['title'],
+                        "source": article['source']['name'],
+                        "description": article['description'],
+                        "url": article['url'],
+                        "published_at": article.get('publishedAt', None),
+                        "summary": article_summary
+                    }
+                }
+
+                # Insert the news entry into the news_articles collection
+                news_articles_collection.insert_one(news_entry)
+    else:
+        print("No changes made or user not found.")
+
+# Function to retrieve user preferences
+def get_user_preferences(username):
+    user = current_user(username)
+    return user.get("preferences") if user else None
+
