@@ -2,4 +2,3 @@ pymongo
 dnspython
 python-dotenv
 requests
-python-dotenv
