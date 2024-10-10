@@ -51,3 +51,27 @@ languages = {
     'it': 'Italian', 'nl': 'Dutch', 'no': 'Norwegian', 'pt': 'Portuguese', 'ru': 'Russian', 'se': 'Swedish',
     'ud': 'Urdu', 'zh': 'Chinese'
 }
+
+def create_new_user(username, email, password):
+    hashed_password = hash_password(password)
+
+    user = {"username": username, "password": hashed_password, "email": email, "created_at": datetime.now()}
+
+    try:
+        users_collection.insert_one(user)
+        print("User created successfully.")
+    except Exception as e:
+        print(f"Error creating user: {str(e)}")
+
+# function used to find an existing user from the database
+def current_user(username):
+    try:
+        return users_collection.find_one({"username": username})
+    except Exception as e:
+        print(f"Error finding user: {str(e)}")
+        return None
+    
+# function to hash the password for encryption
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
