@@ -57,54 +57,46 @@ We chose **MongoDB** for this project due to the following reasons:
 - Python 3.x
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) account for database setup
 - [NewsAPI](https://newsapi.org) account to obtain an API key
-- News API key from [NewsAPI](https://newsapi.org/)
 
 ### Installation Steps
 
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/yourusername/InboxZing.git
-   cd news_app
+   cd InboxZing
 
-2. **Create a Virtual Environment:
+2. ### Create a Virtual Environment
 
-    Creating a virtual environment helps keep your project dependencies isolated.
+Creating a virtual environment helps keep your project dependencies isolated.
 
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  
-    
-    # On Windows use `venv\Scripts\activate`
+```bash
+python -m venv venv
+source venv/bin/activate  
+# On Windows use `venv\Scripts\activate`
 
-3. **Dependencies:
+3. ### Install Dependencies
 
-    To install the required dependencies for the project, run:
+To install the required dependencies for the project, run:
 
-    bash
-    Copy code
-    pip install -r requirements.txt
-
-4. ** Set up MongoDB
-
-    Create a new cluster in MongoDB Atlas.
-
-    Add a database user with read and write permissions.
-
-    Whitelist your IP address for database access.
-
-    Obtain your connection string from MongoDB Atlas and replace the placeholder in the code with your connection string.
-
-5. **Obtain Your News API Key
-
-    Sign up at NewsAPI to get your API key.
-    Replace the placeholder in your code with the actual API key.
-
-6.  ** Run the Application
-    Once you have set up your virtual environment, installed dependencies, and configured MongoDB and NewsAPI, you can run the application:
-
-    bash
-    Copy code
-    python app.py
+```bash
+pip install -r requirements.txt
 
 
+4. ## Set Up MongoDB:
 
+        Create a new cluster in MongoDB Atlas.
+        Add a database user with read and write permissions.
+        Whitelist your IP address for database access.
+        Obtain your connection string from MongoDB Atlas and replace the placeholder in the code with your connection string.
+        Create a .env File:
+
+            MONGO_URI=mongodb+srv://<username>:<password>@newcluster.hj9pw.mongodb.net/?retryWrites=true&w=majority&appName=NewCluster
+            NEWS_API_KEY=your_news_api_key_here
+
+        Make sure to replace <username>, <password>, and your_news_api_key_here with your actual MongoDB and NewsAPI credentials.
+
+6. Run the Application:
+
+        Once you have set up your virtual environment, installed dependencies, and configured MongoDB and NewsAPI, you can run the application:
+
+        python app.py
