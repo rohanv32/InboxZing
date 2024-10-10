@@ -1,4 +1,4 @@
-# InboxZing!
+# InboxZing! 🗞️
 Projects in Programming and Data Sciences - Final Project
 
 Group Members:
@@ -13,10 +13,10 @@ Olivia Xiang
 
 # InboxZing!
 
-## Overview
+## Overview 📰
 InboxZing! (this is an initial prototype) is a web application that allows users to receive news articles tailored to their preferences based on country, category, and language. Users can create accounts, manage their preferences, and view articles with summaries in a preferred style.
 
-## Data Model
+## Data Model👨‍💻
 
 ### Collections in MongoDB
 The app utilizes MongoDB to store the following collections:
@@ -62,29 +62,29 @@ We chose **MongoDB** for this project due to the following reasons:
 
 ### Installation Steps
 
-1. **Clone the repository**:
+1. **Clone the repository**
    ```bash
    git clone https://github.com/yourusername/InboxZing.git
    cd InboxZing
 
-2. ### Create a Virtual Environment
+2. **Create a Virtual Environment**
 
-Creating a virtual environment helps keep your project dependencies isolated.
+   Creating a virtual environment helps keep your project dependencies isolated.
 
       ```bash
       python -m venv venv
       source venv/bin/activate  
       # On Windows use `venv\Scripts\activate`
 
-3. ### Install Dependencies
+3. **Install Dependencies**
 
-To install the required dependencies for the project, run:
+
+   To install the required dependencies for the project, run:
 
       ```bash
       pip install -r requirements.txt
 
-
-4. ## Set Up MongoDB:
+5. **Set Up MongoDB**
 
      Create a new cluster in MongoDB Atlas.
      Add a database user with read and write permissions.
@@ -92,13 +92,13 @@ To install the required dependencies for the project, run:
      Obtain your connection string from MongoDB Atlas and replace the placeholder in the code with your connection string.
      Create a .env File:
    
-         ```bash
-            MONGO_URI=mongodb+srv://<username>:<password>@newcluster.hj9pw.mongodb.net/?retryWrites=true&w=majority&appName=NewCluster
-            NEWS_API_KEY=your_news_api_key_here
+      ```bash
+      MONGO_URI=mongodb+srv://<username>:<password>@newcluster.hj9pw.mongodb.net/?retryWrites=true&w=majority&appName=NewCluster
+      NEWS_API_KEY=your_news_api_key_here
 
-     Make sure to replace <username>, <password>, and your_news_api_key_here with your actual MongoDB and NewsAPI credentials.
+Make sure to replace username, password, and your_news_api_key_here with your actual MongoDB and NewsAPI credentials.
 
-6. Run the Application:
+6. **Run the Application**
 
      Once you have set up your virtual environment, installed dependencies, and configured MongoDB and NewsAPI, you can run the application:
 
