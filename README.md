@@ -9,6 +9,8 @@ Komal Neupane
 
 Ali Tamer
 
+Olivia Xiang
+
 # InboxZing!
 
 ## Overview
