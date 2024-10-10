@@ -290,3 +290,68 @@ def delete_articles(username):
     result = news_articles_collection.delete_many({"username": username})
     print(f"Deleted {result.deleted_count} old articles for user: {username}")
 
+def main():
+    while True:
+        print("Welcome to the Personalized News App")
+        action = input("Do you want to login or signup? (login/signup): ").strip().lower()
+
+        if action == "signup":
+            while True:
+                email = input("Enter your email: ").strip()
+                if users_collection.find_one({"email": email}):
+                    print("Error creating user: This email address is already associated with another user. Please enter another email address.")
+                    continue
+
+                break
+
+            while True:
+                username = input("Enter a username: ").strip()
+                if users_collection.find_one({"username": username}):
+                    print("Error creating user: This username is already associated with another user. Please enter another username.")
+                    continue
+                break
+
+            password = input("Enter a password: ").strip()
+            create_new_user(username, email, password)
+            user_pref_list(username)
+            print(f"Account created for {username}. You can now log in.")
+
+        elif action == "login":
+            username_input = input("Enter your username: ").strip()
+            password = input("Enter your password: ").strip()
+
+            user = users_collection.find_one({"username": username_input})
+
+            if user and user["password"] == hash_password(password):
+                print(f"Welcome back, {username_input}!")
+
+                while True:
+                    print("\nMenu:")
+                    print("1. View your news")
+                    print("2. Edit your preferences")
+                    print("3. Logout")
+
+                    user_action = input("Select an option (1/2/3): ").strip()
+
+                    if user_action == "1":
+                        print("Fetching your news...")
+                        display_news(username_input)
+                    elif user_action == "2":
+                        user_pref_list(username_input)
+                    elif user_action == "3":
+                        print(f"Logging out {username_input}.")
+                        break
+                    else:
+                        print("Invalid option. Please choose again.")
+
+            else:
+                print("Invalid username or password.")
+        else:
+            print("Invalid option. Please choose either login or signup.")
+
+        exit_app = input("Do you want to exit the app? (yes/no): ").strip().lower()
+        if exit_app == "yes":
+            break
+
+if __name__ == "__main__":
+    main()
