@@ -84,19 +84,24 @@ We chose **MongoDB** for this project due to the following reasons:
       ```bash
       pip install -r requirements.txt
 
-5. **Set Up MongoDB**
+4. **Set Up MongoDB**
 
      Create a new cluster in MongoDB Atlas.
+   
      Add a database user with read and write permissions.
+   
      Whitelist your IP address for database access.
+   
      Obtain your connection string from MongoDB Atlas and replace the placeholder in the code with your connection string.
-     Create a .env File:
+   
+
+5. **Configure Environment Variables**
+
+   Create a .env File, make sure to replace username, password, and your_news_api_key_here with your actual MongoDB and NewsAPI credentials:
    
       ```bash
       MONGO_URI=mongodb+srv://<username>:<password>@newcluster.hj9pw.mongodb.net/?retryWrites=true&w=majority&appName=NewCluster
       NEWS_API_KEY=your_news_api_key_here
-
-Make sure to replace username, password, and your_news_api_key_here with your actual MongoDB and NewsAPI credentials.
 
 6. **Run the Application**
 
