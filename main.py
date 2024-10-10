@@ -189,3 +189,104 @@ def get_user_preferences(username):
     user = current_user(username)
     return user.get("preferences") if user else None
 
+# Fetch news articles based on user preferences
+# Using the news API and the preferences chosen by the user with a limit of news articles
+def fetch_news(preferences):
+    params = {
+        'apiKey': NEWS_API_KEY,
+        'country': preferences['country'],
+        'category': preferences['category'],
+        'language': preferences['language'],
+        'pageSize': 10
+    }
+
+    response = requests.get(NEWS_API_URL, params=params)
+
+    if response.status_code == 200:
+        return response.json().get('articles', [])
+    else:
+        return []
+    
+#Utility function to check how much time has passes since the user last logged in and fetched news articles
+def has_time_passed(last_fetched_time, frequency_in_hours):
+    time_difference = datetime.now() - last_fetched_time
+    return time_difference > timedelta(hours=frequency_in_hours)
+
+#Utility function to summarise articles based on the user's preferred style
+def summarize_article(article, summary_style):
+    if summary_style == 'brief':
+        return f"Title: {article['title']}\nSource: {article['source']['name']}\n"
+    elif summary_style == 'humorous':
+        return f"Title: {article['title']} - Brought to you by the always trustworthy {article['source']['name']}!\n"
+    elif summary_style == 'eli5':
+        return f"This article titled '{article['title']}' from {article['source']['name']} is basically saying: {article['description']}.\n"
+    else:
+        return f"Title: {article['title']}\nSource: {article['source']['name']}\nDescription: {article['description']}\nURL: {article['url']}\n"
+    
+def display_news(username):
+    preferences = get_user_preferences(username)
+    if not preferences:
+        print("No preferences found. Please set them up.")
+        return
+
+    # Retrieving the the last fetched article for the user
+    last_article = news_articles_collection.find_one({"username": username}, sort=[("fetched_at", -1)])
+
+    # Checking if enough time has passed based on the user’s frequency setting
+    if last_article and not has_time_passed(last_article['fetched_at'], preferences['frequency']):
+        # If the time hasn't passed, fetch the existing articles
+        print("Fetching previously stored articles...\n")
+        articles = list(news_articles_collection.find({"username": username}))
+
+        for article in articles:
+
+            title = article['article']['title']
+            summary = article['article']['summary']
+            url = article['article']['url']
+
+
+            print(f"Title: {title}")
+            print(f"Summary: {summary}")
+            print(f"URL: {url}\n")
+
+    else:
+        # Time has passed, so delete the old articles and fetch the new ones
+        print("Fetching new articles...\n")
+        delete_articles(username)
+
+        articles = fetch_news(preferences)
+
+        if not articles:
+            print("No articles found.")
+            return
+
+        print("\nLatest News Articles:\n")
+        for article in articles:
+            # Creating the summary based on user’s summary style
+            article_summary = summarize_article(article, preferences['summaryStyle'])
+
+            print(article_summary)
+
+            # Creating an entry for the article in the database with the username and preferences
+            news_entry = {
+                "username": username,
+                "fetched_at": datetime.now(),
+                "preferences": preferences,
+                "article": {
+                    "title": article['title'],
+                    "source": article['source']['name'],
+                    "description": article['description'],
+                    "url": article['url'],
+                    "published_at": article.get('publishedAt', None),
+                    "summary": article_summary
+                }
+            }
+
+            # Insert the news entry into the news_articles collection
+            news_articles_collection.insert_one(news_entry)
+
+# Function used to delete the articles if the preferred frequency time has passed
+def delete_articles(username):
+    result = news_articles_collection.delete_many({"username": username})
+    print(f"Deleted {result.deleted_count} old articles for user: {username}")
+
