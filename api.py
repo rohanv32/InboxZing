@@ -165,6 +165,19 @@ async def get_news(username: str):
 
     return {"articles": articles}
 
+# Third Endpoint to handle modifying of previously set user preferences
+@fast_app.put("/preferences/{username}")
+async def update_preferences(username: str, preferences: UserPreferences):
+  # Update the user's preferences in the database accordingly
+    result = users_collection.update_one(
+        {"username": username},
+        {"$set": {"preferences": preferences.dict()}}
+    )
+    # error handling if prefs are updated successfully
+    # if error, user not found displayed
+    if result.modified_count:
+        return {"message": "Preferences updated successfully"}
+    raise HTTPException(status_code=404, detail="User not found")
 
 # fifth endpoint to get all news articles stored in the database
 @fast_app.get("/news_articles/")
