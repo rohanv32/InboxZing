@@ -22,6 +22,35 @@ news_articles_collection = db['news_articles']
 
 NEWS_API_URL = "https://newsapi.org/v2/top-headlines"
 
+# Model used to Capture user sign up credentials.
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    password: str
+
+# Model used to capture login credentials for logging in of an existing user
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+# Model that is used to Stores the user's news preferences
+# it captures info of country, category, language, and news frequency.
+class UserPreferences(BaseModel):
+    country: str
+    category: str
+    language: str
+    summaryStyle: str
+    frequency: int
+
+# Model used to capture the news articles that match user preferences
+class NewsArticle(BaseModel):
+    title: str
+    source: str
+    description: str
+    url: str
+    published_at: Optional[str]
+    summary: str
+
 # available countries, languages and categories as given by the api
 
 country_codes = ['ae', 'ar', 'at', 'au', 'be', 'bg', 'br', 'ca', 'ch', 'cn', 'co', 'cu', 'cz', 'de', 'eg', 'fr',
