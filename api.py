@@ -105,7 +105,18 @@ async def signup(user: UserCreate):
         # if error display this message
         # errors include having same usernames and emails like another user(duplication)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error creating user: {str(e)}")    
+        raise HTTPException(status_code=400, detail=f"Error creating user: {str(e)}")   
+    
+# Second Endpoint to handle logging in a user
+@fast_app.post("/login")
+async def login(user: UserLogin):
+    db_user = users_collection.find_one({"username": user.username})
+    if db_user and db_user["password"] == hash_password(user.password):
+      # if username and password match user in db, login is successful
+        return {"message": "Login successful"}
+        # if error display this message
+    raise HTTPException(status_code=401, detail="Invalid username or password")
+
 # Fourth endpoint to get news articles based on user preferences pre-set
 @fast_app.get("/news/{username}")
 async def get_news(username: str):
