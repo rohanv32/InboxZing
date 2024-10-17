@@ -84,7 +84,28 @@ def summarize_article(article: dict, summary_style: str) -> str:
         return f"This article titled '{article['title']}' from {article['source']['name']} is basically saying: {article['description']}.\n"
     else:
         return f"Title: {article['title']}\nSource: {article['source']['name']}\nDescription: {article['description']}\nURL: {article['url']}\n"
-    
+        
+# All endpoints are added below
+# first endpoint to handle signing up a a new user
+@fast_app.post("/signup")
+async def signup(user: UserCreate):
+    # hash the user's password for security
+    hashed_password = hash_password(user.password)
+    new_user = {
+        "username": user.username,
+        "email": user.email,
+        "password": hashed_password,
+        "created_at": datetime.now()
+    }
+    # message displayed when user is created
+    # then a user is successfully added to the database
+    try:
+        users_collection.insert_one(new_user)
+        return {"message": "User created successfully"}
+        # if error display this message
+        # errors include having same usernames and emails like another user(duplication)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error creating user: {str(e)}")    
 # Fourth endpoint to get news articles based on user preferences pre-set
 @fast_app.get("/news/{username}")
 async def get_news(username: str):
@@ -142,17 +163,6 @@ async def get_news_articles():
         article["_id"] = str(article["_id"])
     return articles
 
-# last endpoint to delete a user from the database with his stored data
-@fast_app.delete("/user/{username}")
-async def delete_user(username: str):
-    # if user is found in db, delete from the database
-    result = users_collection.delete_one({"username": username})
-    if result.deleted_count:
-      # delete the news articles as well
-        news_articles_collection.delete_many({"username": username})
-        return {"message": f"User {username} and articles associated with the account are deleted"}
-    # error handling part when the user is not found
-    raise HTTPException(status_code=404, detail="User not found")
 
 if __name__ == "__main__":
     import uvicorn
