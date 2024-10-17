@@ -2,3 +2,6 @@ pymongo
 dnspython
 python-dotenv
 requests
+fastapi
+pydantic
+uvicorn
