@@ -55,3 +55,29 @@ def summarize_article(article: dict, summary_style: str) -> str:
         return f"This article titled '{article['title']}' from {article['source']['name']} is basically saying: {article['description']}.\n"
     else:
         return f"Title: {article['title']}\nSource: {article['source']['name']}\nDescription: {article['description']}\nURL: {article['url']}\n"
+    
+
+# fifth endpoint to get all news articles stored in the database
+@fast_app.get("/news_articles/")
+async def get_news_articles():
+    articles = list(news_articles_collection.find())
+    # for mongoDB : Change the news ObjectIds to string same as endpoint 4
+    for article in articles:
+        article["_id"] = str(article["_id"])
+    return articles
+
+# last endpoint to delete a user from the database with his stored data
+@fast_app.delete("/user/{username}")
+async def delete_user(username: str):
+    # if user is found in db, delete from the database
+    result = users_collection.delete_one({"username": username})
+    if result.deleted_count:
+      # delete the news articles as well
+        news_articles_collection.delete_many({"username": username})
+        return {"message": f"User {username} and articles associated with the account are deleted"}
+    # error handling part when the user is not found
+    raise HTTPException(status_code=404, detail="User not found")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(fast_app, host="0.0.0.0", port=8000)
