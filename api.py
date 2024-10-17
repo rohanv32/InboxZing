@@ -9,6 +9,35 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 from bson import ObjectId
 
+# Model used to Capture user sign up credentials.
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    password: str
+
+# Model used to capture login credentials for logging in of an existing user
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+# Model that is used to Stores the user's news preferences
+# it captures info of country, category, language, and news frequency.
+class UserPreferences(BaseModel):
+    country: str
+    category: str
+    language: str
+    summaryStyle: str
+    frequency: int
+
+# Model used to capture the news articles that match user preferences
+class NewsArticle(BaseModel):
+    title: str
+    source: str
+    description: str
+    url: str
+    published_at: Optional[str]
+    summary: str
+
 # loading the env variables and starting the fastapi
 load_dotenv()
 fast_app = FastAPI()
