@@ -165,6 +165,7 @@ async def get_news(username: str):
 
     return {"articles": articles}
 
+
 # fifth endpoint to get all news articles stored in the database
 @fast_app.get("/news_articles/")
 async def get_news_articles():
