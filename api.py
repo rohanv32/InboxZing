@@ -188,6 +188,14 @@ async def get_news_articles():
         article["_id"] = str(article["_id"])
     return articles
 
+# fifth endpoint to get all news articles stored in the database
+@fast_app.get("/news_articles/")
+async def get_news_articles():
+    articles = list(news_articles_collection.find())
+    # for mongoDB : Change the news ObjectIds to string same as endpoint 4
+    for article in articles:
+        article["_id"] = str(article["_id"])
+    return articles
 
 if __name__ == "__main__":
     import uvicorn
