@@ -16,7 +16,7 @@ Olivia Xiang
 ## Overview 📰
 InboxZing! (this is an initial prototype) is a web application that allows users to receive news articles tailored to their preferences based on country, category, and language. Users can create accounts, manage their preferences, and view articles with summaries in a preferred style.
 
-## Data Model👨‍💻
+## Data Model 👨‍💻
 
 ### Collections in MongoDB
 The app utilizes MongoDB to store the following collections:
@@ -46,14 +46,14 @@ The app utilizes MongoDB to store the following collections:
      - **url** (String): Link to the full article.
      - **published_at** (Date): Date when the article was published.
 
-## Why MongoDB?
+## Why MongoDB? 🤔
 
 We chose **MongoDB** for this project due to the following reasons:
 - **Schema Flexibility**: MongoDB allows for dynamic schemas, which is ideal for a news application where user preferences and articles can vary significantly.
 - **Scalability**: It can handle large volumes of data efficiently, making it suitable for storing numerous articles fetched from various sources.
 - **Performance**: MongoDB's document-oriented structure enables fast data retrieval, which is great for for providing users with timely news updates.
 
-## Setup Instructions
+## Setup Instructions 💻
 
 ### Prerequisites
 - Python 3.x
