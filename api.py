@@ -85,6 +85,53 @@ def summarize_article(article: dict, summary_style: str) -> str:
     else:
         return f"Title: {article['title']}\nSource: {article['source']['name']}\nDescription: {article['description']}\nURL: {article['url']}\n"
     
+# Fourth endpoint to get news articles based on user preferences pre-set
+@fast_app.get("/news/{username}")
+async def get_news(username: str):
+    user = users_collection.find_one({"username": username})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    preferences = user.get("preferences")
+    if not preferences:
+        raise HTTPException(status_code=400, detail="User preferences not set")
+
+    last_article = news_articles_collection.find_one({"username": username}, sort=[("fetched_at", -1)])
+
+    # Check if we need to fetch new articles based on frequency
+    if last_article and datetime.now() - last_article['fetched_at'] < timedelta(hours=preferences['frequency']):
+        articles = list(news_articles_collection.find({"username": username}))
+    else:
+      # Clear old articles
+        news_articles_collection.delete_many({"username": username})
+        fetched_articles = fetch_news(UserPreferences(**preferences))
+
+        articles = []
+        for article in fetched_articles:
+            summary = summarize_article(article, preferences['summaryStyle'])
+            news_entry = {
+                "username": username,
+                "fetched_at": datetime.now(),
+                "preferences": preferences,
+                "article": {
+                    "title": article['title'],
+                    "source": article['source']['name'],
+                    "description": article['description'],
+                    "url": article['url'],
+                    "published_at": article.get('publishedAt'),
+                    "summary": summary
+                }
+            }
+            news_articles_collection.insert_one(news_entry)
+            # Add the _id as a string to the result
+            news_entry['_id'] = str(news_entry['_id'])
+            articles.append(news_entry)
+
+    # Convert ObjectId to string for all articles
+    for article in articles:
+        article['_id'] = str(article['_id'])
+
+    return {"articles": articles}
 
 # fifth endpoint to get all news articles stored in the database
 @fast_app.get("/news_articles/")
