@@ -1,9 +1,9 @@
 # InboxZing! 🗞️
 Projects in Programming and Data Sciences - Final Project
 
-Group Members:
+## Group Members 👥
 
-Rohan
+Rohan Sabu
 
 Komal Neupane
 
@@ -11,10 +11,31 @@ Ali Tamer
 
 Olivia Xiang
 
-# InboxZing!
-
 ## Overview 📰
 InboxZing! (this is an initial prototype) is a web application that allows users to receive news articles tailored to their preferences based on country, category, and language. Users can create accounts, manage their preferences, and view articles with summaries in a preferred style.
+
+## Features 👉
+User Management: Create accounts with unique usernames and emails.
+
+News Customization: Select preferred countries, languages, and categories to receive personalized news feeds.
+
+News API Integration: Fetches real-time headlines from various countries and categories.
+
+Database Storage: Stores users, preferences, and articles in MongoDB.
+
+## Usage 📝
+User Registration: Users can register with a unique username and email.
+
+Preferences Setup: Users specify their preferred countries, languages, and categories.
+
+Fetch News: The app fetches news based on user preferences and displays the latest headlines.
+
+## Tech Stack 💾
+Python: Core language
+
+MongoDB: Database for storing user data and articles
+
+News API: Third-party API for fetching news headlines
 
 ## Data Model 👨‍💻
 
@@ -109,3 +130,6 @@ We chose **MongoDB** for this project due to the following reasons:
 
       ```bash
         python app.py
+
+## License 📎
+This project is licensed under the MIT license.
