@@ -85,7 +85,7 @@ We chose **MongoDB** for this project due to the following reasons:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/InboxZing.git
+   git clone https://github.com/rohanv32/InboxZing.git
    cd InboxZing
 
 2. **Create a Virtual Environment**
