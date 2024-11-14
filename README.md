@@ -126,10 +126,14 @@ We chose **MongoDB** for this project due to the following reasons:
 
 6. **Run the Application**
 
-     Once you have set up your virtual environment, installed dependencies, and configured MongoDB and NewsAPI, you can run the application:
+     Once you have set up your virtual environment, installed dependencies, and configured MongoDB and NewsAPI, you can run the application's backend:
 
       ```bash
-        python app.py
+        python3 api.py
+
+6. **Frontend Guide**
+
+     Please go to https://github.com/rohanv32/InboxZingReact and follow the set up instructions there.
 
 ## License 📎
 This project is licensed under the MIT license.
