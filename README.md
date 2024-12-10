@@ -72,7 +72,7 @@ The app utilizes MongoDB to store the following collections:
 We chose **MongoDB** for this project due to the following reasons:
 - **Schema Flexibility**: MongoDB allows for dynamic schemas, which is ideal for a news application where user preferences and articles can vary significantly.
 - **Scalability**: It can handle large volumes of data efficiently, making it suitable for storing numerous articles fetched from various sources.
-- **Performance**: MongoDB's document-oriented structure enables fast data retrieval, which is great for for providing users with timely news updates.
+- **Performance**: MongoDB's document-oriented structure enables fast data retrieval, which is great for providing users with timely news updates.
 
 ## Setup Instructions 💻
 
